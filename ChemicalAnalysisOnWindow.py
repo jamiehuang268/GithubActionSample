@@ -131,7 +131,7 @@ def send_weather(access_token, weather):
                 "value": weather[1] if weather[1] is not None else ""
             },
             "wind_dir": {
-                "value": num_value
+                "value": txt_value
             },
             "today_note": {
                 "value": txt_value
