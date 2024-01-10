@@ -20,7 +20,7 @@ data = res.read()
 parsed_data = json.loads(data.decode("utf-8"))
 print(data.decode("utf-8"))
 num_value = parsed_data["data"]["result"]["num"]
-txt_value = str(parsed_data["data"]["result"]["txt"])
+txt_value = str(parsed_data["data"]["result"]["txt"]).replace("\n", "")
 print(num_value)
 print(txt_value)
 
