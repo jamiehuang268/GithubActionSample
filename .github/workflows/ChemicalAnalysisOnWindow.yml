@@ -1,9 +1,12 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
 name: ChemicalAnalysisOnWindow
 
 on:
   schedule:
     # 设置启动时间，为 UTC 时间, UTC23点 对应北京时间早7点
-    - cron : '20 6 * * *'
+    - cron : '00 23 * * *'
   workflow_dispatch:
 
 permissions:
