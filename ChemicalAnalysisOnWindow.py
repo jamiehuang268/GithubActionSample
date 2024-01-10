@@ -20,9 +20,10 @@ data = res.read()
 parsed_data = json.loads(data.decode("utf-8"))
 print(data.decode("utf-8"))
 num_value = parsed_data["data"]["result"]["num"]
-txt_value = parsed_data["data"]["result"]["txt"]
+txt_value = str(parsed_data["data"]["result"]["txt"])
 print(num_value)
 print(txt_value)
+
 
 # 从测试号信息获取
 appID = "wxd7e59e0f23f1df39"
