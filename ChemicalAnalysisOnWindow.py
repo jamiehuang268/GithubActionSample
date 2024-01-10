@@ -7,7 +7,7 @@ import json
 from bs4 import BeautifulSoup
 import http.client
 import json
-from wxauto import WeChat
+
 conn = http.client.HTTPSConnection("www.kdocs.cn")
 payload = "{\"Context\":{\"argv\":{},\"data\":\"Sheet2\",\"range\":\"A1\"}}"
 headers = {
