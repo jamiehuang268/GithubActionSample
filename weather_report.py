@@ -1,16 +1,39 @@
 # 安装依赖 pip3 install requests html5lib bs4 schedule
 import os
+from datetime import datetime
+
 import requests
 import json
 from bs4 import BeautifulSoup
 
+
 # 从测试号信息获取
-appID = os.environ.get("APP_ID")
-appSecret = os.environ.get("APP_SECRET")
+appID = "wxd7e59e0f23f1df39"
+appSecret = "46c19f0d8f36b02f6e09818f268c94c6"
 # 收信人ID即 用户列表中的微信号
-openId = os.environ.get("OPEN_ID")
+openId = os.environ.get("oaSMP66cd7YlnxuDuhOJ8u1MTWG8")
 # 天气预报模板ID
-weather_template_id = os.environ.get("TEMPLATE_ID")
+weather_template_id = os.environ.get("HzoucWPEzFmHgSxT-IxPQqJb0o6iaZ6iT25Nzv_rTzk")
+
+
+
+
+def get_access_token():
+
+    url = 'https://api.weixin.qq.com/cgi-bin/token'
+
+    params = {
+        'grant_type': 'client_credential',
+        'appid': appID,
+        'secret': appSecret
+    }
+
+    response = requests.get(url, params=params)
+    json_response = response.json()
+    access_token = json_response.get('access_token')
+    print(access_token)
+    return access_token
+
 
 def get_weather(my_city):
     urls = ["http://www.weather.com.cn/textFC/hb.shtml",
@@ -56,18 +79,6 @@ def get_weather(my_city):
                     weather_typ = weather_typ_day if weather_typ_day != "-" else weather_type_night
                     wind = f"{wind_day}" if wind_day != "--" else f"{wind_night}"
                     return this_city, temp, weather_typ, wind
-
-
-def get_access_token():
-    # 获取access token的url
-    url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={}&secret={}' \
-        .format(appID.strip(), appSecret.strip())
-    response = requests.get(url).json()
-    print(response)
-    access_token = response.get('access_token')
-    return access_token
-
-
 def get_daily_love():
     # 每日一句情话
     url = "https://api.lovelive.tools/api/SweetNothings/Serialization/Json"
@@ -79,48 +90,61 @@ def get_daily_love():
 
 
 def send_weather(access_token, weather):
-    # touser 就是 openID
-    # template_id 就是模板ID
-    # url 就是点击模板跳转的url
-    # data就按这种格式写，time和text就是之前{{time.DATA}}中的那个time，value就是你要替换DATA的值
-
-    import datetime
-    today = datetime.date.today()
+    today = datetime.now().date()
     today_str = today.strftime("%Y年%m月%d日")
 
+    openId = "oaSMP66cd7YlnxuDuhOJ8u1MTWG8"
+    weather_template_id = "HzoucWPEzFmHgSxT-IxPQqJb0o6iaZ6iT25Nzv_rTzk"
+
     body = {
-        "touser": openId.strip(),
-        "template_id": weather_template_id.strip(),
+        "touser": openId,
+        "template_id": weather_template_id,
         "url": "https://weixin.qq.com",
         "data": {
             "date": {
                 "value": today_str
             },
             "region": {
-                "value": weather[0]
+                "value": weather[0] if weather[0] is not None else ""
             },
             "weather": {
-                "value": weather[2]
+                "value": weather[2] if weather[2] is not None else ""
             },
             "temp": {
-                "value": weather[1]
+                "value": weather[1] if weather[1] is not None else ""
             },
             "wind_dir": {
-                "value": weather[3]
+                "value": weather[3] if weather[3] is not None else ""
             },
             "today_note": {
-                "value": get_daily_love()
+                "value": get_daily_love() if get_daily_love() is not None else ""
             }
+            # Add more data fields as needed
         }
     }
+
+    # Construct the request data following the provided example
+    request_data = {
+        "grant_type": "client_credential",
+        "appid": "APPID",  # Replace with your actual app ID
+        "secret": "APPSECRET",  # Replace with your actual app secret
+        "force_refresh": False
+    }
+
     url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={}'.format(access_token)
-    print(requests.post(url, json.dumps(body)).text)
+    headers = {'Content-Type': 'application/json'}  # Set content type to JSON
+
+    print(requests.post(url, data=json.dumps(body), headers=headers, params=request_data).text)
+
+# Note: Replace "APPID" and "APPSECRET" with your actual app ID and app secret.
 
 
 
 def weather_report(this_city):
     # 1.获取access_token
     access_token = get_access_token()
+    #access_token = "76_2NYJC6lD7A6EYPTP5h3ljdjAnK0RwFMpQw45tdNJJ4zPnJlPncZru8cFf1Ilop02NZRR4SbQ_UT-idN7wKLohJbpYDxAN01426tdNNN_HL984QrZ-zw4UoFQ2qwKYHaAHACQZ"
+
     # 2. 获取天气
     weather = get_weather(this_city)
     print(f"天气信息： {weather}")
@@ -130,4 +154,4 @@ def weather_report(this_city):
 
 
 if __name__ == '__main__':
-    weather_report("淄博")
+    weather_report("苏州")
