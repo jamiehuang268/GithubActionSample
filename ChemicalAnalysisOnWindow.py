@@ -23,7 +23,11 @@ num_value = parsed_data["data"]["result"]["num"]
 txt_value = str(parsed_data["data"]["result"]["txt"]).replace("\n", "")
 print(num_value)
 print(txt_value)
-txt_value = "欢迎您关注爱心互助公众服务号，开启您的财富之旅。如需人工服务请加\n客服微信号:187182764,\n客服QQ号:27688677,\n客服电话:181281606"
+txt_value = """
+123
+456
+789
+"""
 
 
 # 从测试号信息获取
