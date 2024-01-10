@@ -23,11 +23,7 @@ num_value = parsed_data["data"]["result"]["num"]
 txt_value = str(parsed_data["data"]["result"]["txt"]).replace("\n", "")
 print(num_value)
 print(txt_value)
-txt_value = """
-123
-456
-789
-"""
+txt_value = "123\r\n456\r\n789"
 
 
 # 从测试号信息获取
